@@ -1,4 +1,5 @@
 -- Section_01: PostgreSQL Basic Select
+-- Sample DB: https://www.postgresqltutorial.com/postgresql-getting-started/postgresql-sample-database/
 
 -- Query01: Select first name, last name and email from table <customer>
 -- SELECT 
