@@ -1,0 +1,74 @@
+-- Lab_05: Table Operations / INNER JOIN
+
+
+
+-- Query_01/INNER JOIN/2 Tables
+-- Whenever a customer makes a payment, a new row is inserted into the <payment> table
+-- Each customer may have zero or many payments. However, each payment belongs to one and only one customer. The customer_id column establishes the relationship between the two tables.
+
+-- List customer_id, their names amount paid and the payment date who has done the payment
+-- @Table<customer>: customer_id, first_name, last_name
+-- @Table<payment> : customer_id, amount, payment_date
+
+-- Solution Strategy 01: INNER JOIN - ON, Table Aliases
+SELECT
+	c.customer_id,
+	first_name,
+	last_name,
+	amount,
+	payment_date
+FROM 
+	customer c
+INNER JOIN payment p
+	ON p.customer_id = c.customer_id
+ORDER BY
+	payment_date DESC;
+
+-- Solution Strategy 02: INNER JOIN - USING, No Table Aliases
+SELECT
+	customer_id,
+	first_name,
+	last_name,
+	amount,
+	payment_date
+FROM
+	customer
+INNER JOIN payment 
+	USING (customer_id)
+ORDER BY
+	payment_date DESC;
+
+
+-- Query_02/INNER_JOIN/3 Tables
+-- List all payment_id, its associated customer name (first + last name) + customer_id (who made the payment), 
+	-- staff name (who processed the payment), amount paid and payment date
+-- Tables: <staff>, <payment>, <customer>
+-- @Table<payment>	: payment_id, customer_id, staff_id, amount, payment_date
+-- @Table<customer>	: customer_id, first_name,last_name
+-- @Table<staff>	: staff_id, first_name, last_name
+
+-- Scenario:
+	-- Each <staff> handles ZERO or MANY <payment>. And each payment is processed by ONE and ONLY one staff.
+	-- Each customer made ZERO or MANY payments. Each payment is made by one customer.
+
+SELECT
+	payment_id,
+	c.customer_id,
+	c.first_name customer_first_name,
+	c.last_name customer_last_name,
+	s.first_name staff_first_name,
+	s.last_name staff_last_name,
+	amount,
+	payment_date
+FROM
+	customer c
+INNER JOIN payment p					-- first INNER JOIN Clause
+	ON p.customer_id = c.customer_id
+INNER JOIN staff s						-- Second INNER JOIN Clause
+	ON p.staff_id = s.staff_id
+ORDER BY payment_date DESC;
+
+select * from film;
+
+
+
