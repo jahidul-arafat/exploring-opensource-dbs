@@ -1,126 +1,62 @@
-/*Lab_12: PostGreSQL HAVING*/
+/*Lab_14: UNION Clause*/
 /*
-- The HAVING cluase specifies a search condition for a group or an aggregate.
-- The HAVING clause is often used with the GROUP BY clause to filter groups or aggregates based on a specific condition.
-Syntax:
+SYNTAX:
 -------
-SELECT
-	col1,
-	col2,
-	...,
-	aggregate_function(col3)
-FROM
-	table_name
-GROUP BY
-	col1,
-	col2,
-	...
-HAVING
-	condition
+SELECT select_list_1
+FROM table_expresssion_1
+UNION
+SELECT select_list_2
+FROM table_expression_2
 */
 
-/* Difference between WHERE and HAVING
-- The WHERE clause allows you to filter rows based on a specified condition. 
-- However, the HAVING clause allows you to filter groups of rows according to a specified condition.
-- In other words, the WHERE clause is applied to rows while the HAVING clause is applied to groups of rows.
-
+/*Environment Setup
+- Create a Table named <top_rated_films>			:: Attr <title, release_year>
+- Create a Table named <most_popular_films>			:: Attr <title, release_year>
 */
 
 /*
-NOTES:
-FROM
- |
- V
-WHERE
- |
- V
-GROUP BY
- |
- V
-HAVING
- |
- V
-SELECT
- |
- V
-DISTINCT
- |
- V
-ORDER BY
- |
- V
-LIMIT
+DROP TABLE IF EXISTS top_rated_films;
+CREATE TABLE top_rated_films(
+	title VARCHAR NOT NULL,
+	release_year SMALLINT
+);
 
+DROP TABLE IF EXISTS most_popular_films;
+CREATE TABLE most_popular_films(
+	title VARCHAR NOT NULL,
+	release_year SMALLINT
+);
 */
 
-/*Query_1a: List all customers (customer_id) aggegrated by total amount paid over 200 USD*/
-SELECT
-	customer_id,
-	SUM(amount) total_amount_paid
-FROM
-	payment
-GROUP BY
-	customer_id
-HAVING 
-	SUM(amount) > 200;
+/*
+INSERT INTO
+	top_rated_films(title,release_year)
+VALUES
+	('The Shawshank Redemption',1994),
+   	('The Godfather',1972),
+   	('12 Angry Men',1957);
 
-/*Query_1b: List all customers (customer_name) aggegrated by total amount paid over 200 USD*/
-SELECT
-	first_name ||' '||last_name customer_name,
-	SUM(amount) total_amount_paid
-FROM
-	payment
-	INNER JOIN customer USING(customer_id)
-GROUP BY
-	customer_id
-HAVING 
-	SUM(amount) > 200;
+INSERT INTO 
+   most_popular_films(title,release_year)
+VALUES
+   ('An American Pickle',2020),
+   ('The Godfather',1972),
+   ('Greyhound',2020);
+*/
 
-/*Query_1c: List all (customers (customer_name) and staff (staff_name)) pair aggegrated by total amount paid over 200 USD*/
-SELECT
-	c.first_name ||' '||c.last_name customer_name,
-	s.first_name ||' '||s.last_name staff_name,
-	SUM(amount) total_amount_paid
-FROM
-	payment
-	INNER JOIN customer c USING(customer_id)
-	INNER JOIN staff s USING(staff_id)
-GROUP BY
-	customer_name,
-	staff_name
-HAVING 
-	SUM(amount) > 100;
-	
-/*Query_2: Find number of customers per store*/
-/*2a. Find how many distinct stores are there*/
-SELECT
-	DISTINCT store_id
-FROM
-	customer;
+/*Query-1: PostgreSQL UNION*/
+SELECT title,release_year
+FROM top_rated_films
+UNION
+SELECT title,release_year
+FROM most_popular_films;
 
-
-/*2b. Find number of customers per store*/
-SELECT
-	store_id,
-	COUNT(customer_id)
-FROM
-	customer
-GROUP BY
-	store_id;
-
-/*2c. Find stores having more than 300 customers*/
-SELECT
-	store_id,
-	COUNT(customer_id)
-FROM
-	customer
-GROUP BY
-	store_id
-HAVING
-	COUNT(customer_id) >300;
-
-
-
-	
-	
-	
+/*Query-2: PostgreSQL UNION ALL - havingn duplicate rows*/
+SELECT title,release_year
+FROM top_rated_films
+UNION ALL
+SELECT title,release_year
+FROM most_popular_films
+ORDER BY
+	release_year DESC;
+   
