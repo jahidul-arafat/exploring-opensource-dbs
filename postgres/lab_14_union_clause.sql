@@ -1,4 +1,6 @@
-/*Lab_14: UNION Clause*/
+/*Lab_14: UNION Clause
+Ref: https://www.postgresqltutorial.com/postgresql-tutorial/postgresql-union/
+*/
 /*
 SYNTAX:
 -------
